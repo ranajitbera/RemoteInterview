@@ -1,0 +1,49 @@
+import { Inngest } from "inngest";
+import { connectDB } from "./connectDB.js";
+import User from "../model/user.model.js";
+
+export const inngest = new Inngest({
+  id: "RemoteInterview",
+  isDev:
+    process.env.NODE_ENV !== "production" || process.env.INNGEST_DEV === "1",
+});
+
+const syncUser = inngest.createFunction(
+  {
+    id: "sync-user",
+    triggers: { event: "clerk/user.created" },
+  },
+  async ({ event }) => {
+    await connectDB();
+
+    const { id, email_addresses, first_name, last_name, image_url } =
+      event.data;
+    console.log(id, email_addresses, first_name, last_name, image_url);
+    
+    const newUser = {
+      clerkId: id,
+      email: email_addresses[0]?.email_address,
+      name: `${first_name || ""} ${last_name || ""}`,
+      profileImage: image_url,
+    };
+
+    const user = await User.create(newUser);
+    await user.save();
+  },
+);
+
+const deleteUser = inngest.createFunction(
+  {
+    id: "delete-user",
+    triggers: { event: "clerk/user.deleted" },
+  },
+  async ({ event }) => {
+    await connectDB();
+
+    const { id } = event.data;
+
+    await User.deleteOne({ clerkId: id });
+  },
+);
+
+export const functions = [syncUser, deleteUser];
