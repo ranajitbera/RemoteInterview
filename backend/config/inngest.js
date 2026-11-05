@@ -3,9 +3,7 @@ import { connectDB } from "./connectDB.js";
 import User from "../model/user.model.js";
 
 export const inngest = new Inngest({
-  id: "RemoteInterview",
-  isDev:
-    process.env.NODE_ENV !== "production" || process.env.INNGEST_DEV === "1",
+  id: "RemoteInterview"
 });
 
 const syncUser = inngest.createFunction(
