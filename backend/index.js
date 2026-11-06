@@ -4,7 +4,7 @@ import express from "express";
 import cors from "cors";
 import { connectDB } from "./config/connectDB.js";
 import { serve } from "inngest/express";
-import { inngest,functions } from "./config/inngest.js";
+import { inngest, functions } from "./config/inngest.js";
 
 const port = process.env.PORT || 5000;
 
@@ -18,10 +18,9 @@ app.use(
   serve({
     client: inngest,
     functions,
-    signingKey: process.env.INNGEST_SIGNIN_KEY,
+    signingKey: process.env.INNGEST_SIGNING_KEY,
   }),
 );
-
 
 app.listen(port, "0.0.0.0", async () => {
   await connectDB();
