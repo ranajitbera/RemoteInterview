@@ -16,7 +16,8 @@
     "express": "^5.3.0",
     "inngest": "^4.26.2",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.11.4"
+    "mongoose": "^9.11.4",
+    "stream-chat": "^9.24.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
