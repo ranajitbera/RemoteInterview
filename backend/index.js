@@ -13,7 +13,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/inngest",serve({client:inngest,functions}))
+app.use(
+  "/api/inngest",
+  serve({
+    client: inngest,
+    functions,
+    signingKey: process.env.INNGEST_SIGNIN_KEY,
+  }),
+);
 
 
 app.listen(port, "0.0.0.0", async () => {
